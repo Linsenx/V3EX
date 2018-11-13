@@ -1,0 +1,24 @@
+{
+  "name": "v3ex",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NightCats/V3EX.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NightCats/V3EX/issues"
+  },
+  "homepage": "https://github.com/NightCats/V3EX#readme",
+  "dependencies": {
+    "koa": "^2.6.1",
+    "koa-router": "^7.4.0",
+    "mongoose": "^5.3.9"
+  }
+}
