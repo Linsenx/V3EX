@@ -1,8 +1,12 @@
 const Koa = require('koa');
 const app = new Koa();
 
+// middlewares
+app.use(require('./middlewares/filter.js'));
+app.use(require('./middlewares/response.js'));
+
 // database
-require('./modules/db.js');
+require('./models/db.js');
 
 // session
 const session = require('koa-session');
@@ -21,8 +25,6 @@ app.use(bodyParser);
 
 // router
 const router = require('./routes');
-app.use(require('./middlewares/filter.js'));
-app.use(require('./middlewares/response.js'));
 app.use(router.routes());
 
 // http listener

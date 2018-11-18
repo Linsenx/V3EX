@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const UserModel = require('../modules/user/user.js');
+const UserModel = require('../models/user/user.js');
 const validator = require('validator');
 const passport = require('koa-passport');
 

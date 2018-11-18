@@ -2,15 +2,17 @@ const router = require('koa-router')();
 
 const user = require('../controllers/user.js');
 // 用户注册
-router.post('/user', user.register)
+router.post('/user', user.register);
 // 用户登录
-router.post('/session', user.login)
+router.post('/session', user.login);
 // 用户登出
-router.delete('/session', user.logout)
+router.delete('/session', user.logout);
 
 const post = require('../controllers/post.js');
 // 创建帖子
-router.post('/post',post.create)
+router.post('/post',post.create);
+// 创建回复
+router.post('/reply', post.createReply);
 
 
 module.exports = router;
