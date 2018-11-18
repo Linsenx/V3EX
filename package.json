@@ -17,8 +17,13 @@
   },
   "homepage": "https://github.com/NightCats/V3EX#readme",
   "dependencies": {
+    "blueimp-md5": "^2.10.0",
     "koa": "^2.6.1",
+    "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
-    "mongoose": "^5.3.9"
+    "koa-session": "^5.10.0",
+    "mongoose": "^5.3.9",
+    "tracer": "^0.9.4",
+    "validator": "^10.9.0"
   }
 }
