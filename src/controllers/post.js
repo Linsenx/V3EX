@@ -3,12 +3,11 @@ const validator = require('validator');
 const PostModle = require('../modules/post/post.js');
 const UserModle = require('../modules/user/user.js');
 
-
 class PostController {
   // 创建帖子
   async create(ctx) {
     const { node, title, content } = ctx.request.body;
-    if (validator.isEmpty(ctx.session.username + '')) {
+    if (ctx.isUnauthenticated()) {
       return ctx.error({ msg: '您尚未登录，无法进行发帖操作' });
     }
 
@@ -16,9 +15,9 @@ class PostController {
       return ctx.error({ msg: '标题和内容不能为空'});
     }
 
-    const user = await UserModle.findOne({ username: ctx.session.username });
+    const user = ctx.state.user;
     const result = await PostModle.create({ 
-      author: user._id,
+      author: user.id,
       title: title,
       node : node,
       content : content,

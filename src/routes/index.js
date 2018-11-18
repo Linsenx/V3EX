@@ -13,5 +13,4 @@ const post = require('../controllers/post.js');
 router.post('/post',post.create)
 
 
-
 module.exports = router;

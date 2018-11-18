@@ -1,4 +1,6 @@
-let mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const md5 = require('blueimp-md5');
+const validator = require('validator');
 
 /**
  * 用户结构
@@ -15,6 +17,20 @@ const userSchema = new mongoose.Schema({
   email: { type: String, default: '' },
   createAt: { type: Date, required: true }
 });
+
+// 密码密钥
+const md5_key = "helloworld_v3ex";
+
+// 生成加盐密码
+userSchema.statics.generatePassword = function(password) {
+  return md5(password, md5_key);
+}
+
+// 用户验证密码
+userSchema.methods.verifyPassword = function(unhashPass) {
+  const hash = userSchema.statics.generatePassword(unhashPass);
+  return validator.equals(hash, this.password);
+}
 
 const User = mongoose.model('User', userSchema);
 

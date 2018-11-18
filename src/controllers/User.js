@@ -1,11 +1,9 @@
 const mongoose = require('mongoose');
 const UserModel = require('../modules/user/user.js');
-const md5 = require('blueimp-md5');
 const validator = require('validator');
-const salt_key = "helloworld_v3ex";
+const passport = require('koa-passport');
 
 class UserController {
-
   // 用户注册
   async register(ctx) {
     const { username, password, email } = ctx.request.body;
@@ -24,7 +22,7 @@ class UserController {
 
     const result = await UserModel.create({ 
       username: username,
-      password: md5(password, salt_key),
+      password: UserModel.generatePassword(password),
       email: email,
       createAt: new Date()
     });
@@ -43,21 +41,20 @@ class UserController {
       return ctx.error({ msg: '该用户尚未注册' });
     }
 
-    const hash = md5(password, salt_key);
-    if (!validator.equals(hash, user.password)) {
+    if (!user.verifyPassword(password)) {
       return ctx.error({ msg: '用户名和密码无法匹配' });
     }
-
-    ctx.session.username = username;
+    
+    ctx.login(user);
     ctx.success({ msg: '登录成功' });
   }
 
   // 用户登出
   logout(ctx) {
-    if (validator.isEmpty(ctx.session.username + '')) {
+    if (ctx.isUnauthenticated()) {
       return ctx.error({ msg: '您尚未登录，无法进行登出操作' });
     }
-    ctx.session.username = '';
+    ctx.logout();
     ctx.success({ msg: '登出成功' });
   }
 }
