@@ -1,9 +1,30 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
+const PostModle = require('../modules/post/post.js');
+const UserModle = require('../modules/user/user.js');
+
 
 class PostController {
   // 创建帖子
   async create(ctx) {
+    const { node, title, content } = ctx.request.body;
+    if (validator.isEmpty(ctx.session.username + '')) {
+      return ctx.error({ msg: '您尚未登录，无法进行发帖操作' });
+    }
+    const user = await UserModle.findOne({ username: ctx.session.username });
+    if (validator.isEmpty(title) || validator.isEmpty(content)){
+      return ctx.error({ msg: '标题和内容不能为空'});
+    }
 
+
+    const result = await PostModle.create({ 
+      author: user._id,
+      title: title,
+      node : node,
+      content : content,
+      createAt: new Date()
+    });
+    ctx.success({ msg: '发布成功!' })
   }
 
   // 发表评论
@@ -14,6 +35,9 @@ class PostController {
   // 删除帖子
   async delete(ctx) {
 
+    // if (!validator.equals(, User)) {
+    //   return ctx.error({ msg: '用户名和密码无法匹配' });
+    // }
   }
 }
 

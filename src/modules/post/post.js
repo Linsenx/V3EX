@@ -1,4 +1,4 @@
-let mongooes = require('mongoose');
+let mongoose = require('mongoose');
 
 /**
  * 帖子结构
@@ -11,7 +11,8 @@ let mongooes = require('mongoose');
  * -- dislikeCount: 踩
  * -- reviewCount: 点击量
  */
-const postSchema = new mongooes.Schema({
+const postSchema = new mongoose.Schema({
+  author: { type: mongoose.Schema.Types.ObjectId, required: true},
   node: { type: Number, default: 0 },
   tags: { type: Array, default: [] },
   title: { type: String, required: true },
@@ -19,9 +20,9 @@ const postSchema = new mongooes.Schema({
   createAt: { type: Date, required: true },
   likeCount: { type: Number, default: 0 },
   dislikeCount: { type: Number, default: 0 },
-  reviewCount: { type: Number, default: 0 }  
+  reviewCount: { type: Number, default: 0 } 
 });
 
-const Post = mongooes.model('Post', postSchema);
+const Post = mongoose.model('Post', postSchema);
 
 module.exports = Post;
