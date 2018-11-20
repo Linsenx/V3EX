@@ -28,7 +28,23 @@ class PostController {
 
   // 删除帖子
   async delete(ctx) {
+    const { postId } = ctx.request.body;
+    if (ctx.isUnauthenticated()) {
+      return ctx.error({ msg: '您尚未登录，无法进行删帖操作' });
+    }
+    const user = ctx.state.user;
+    const post = await PostModel.findById(postId);
+    
+    if (!post) {
+      return ctx.error({ msg: '参数错误，未找到该帖子' });
+    }
+    if (!validator.equals(post.authorId.toString(), user.id)) {
+      return ctx.error({ msg: '您没有权限删帖' });
+    }
+    post.deleted = true;
+    post.save();
 
+    return ctx.success({ msg: '删帖成功！' });
   }
 }
 
