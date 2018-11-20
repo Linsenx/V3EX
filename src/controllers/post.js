@@ -1,7 +1,5 @@
-const mongoose = require('mongoose');
 const validator = require('validator');
 const PostModel = require('../models/post/post.js');
-const ReplyModel = require('../models/post/reply.js');
 const UserModel = require('../models/user/user.js');
 
 class PostController {
@@ -26,33 +24,6 @@ class PostController {
       updateAt: new Date()
     });
     ctx.success({ msg: '帖子发布成功' })
-  }
-
-  // 发表回复
-  async createReply(ctx) {
-    const { postId, content } = ctx.request.body;
-    if (ctx.isUnauthenticated()) {
-      return ctx.error({ msg: '您尚未登录，无法进行回复操作' });
-    }
-
-    if (validator.isEmpty(content)){
-      return ctx.error({ msg: '内容不能为空'});
-    }
-
-    const post = await PostModel.findById(postId);
-    if (!post) {
-      return ctx.error({ msg: '参数错误，未找到该帖子' });
-    }
-    
-    const user = ctx.state.user;
-    ReplyModel.create({
-      content: content,
-      authorId: user.id,
-      postId: post.id,
-      createAt: new Date(),
-      updateAt: new Date()
-    })
-    ctx.success({ msg: '回复发布成功' })
   }
 
   // 删除帖子
