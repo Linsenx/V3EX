@@ -10,7 +10,9 @@ router.delete('/session', user.logout);
 
 const post = require('../controllers/post.js');
 // 创建帖子
-router.post('/post',post.create);
+router.post('/post', post.create);
+// 删除帖子
+router.delete('/post', post.delete);
 
 const reply = require('../controllers/reply.js');
 // 创建回复
