@@ -13,6 +13,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
  * -- likeCount: 顶
  * -- dislikeCount: 踩
  * -- reviewCount: 点击量
+ * -- deleted: 是否被删除
  */
 const PostSchema = new mongoose.Schema({
   node: { type: Number, default: 0 },
@@ -24,7 +25,8 @@ const PostSchema = new mongoose.Schema({
   updateAt: { type: Date, required: true },
   likeCount: { type: Number, default: 0 },
   dislikeCount: { type: Number, default: 0 },
-  reviewCount: { type: Number, default: 0 } 
+  reviewCount: { type: Number, default: 0 },
+  deleted: { type: Boolean, default: false }
 });
 
 const Post = mongoose.model('Post', PostSchema);

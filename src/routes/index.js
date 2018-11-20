@@ -11,8 +11,10 @@ router.delete('/session', user.logout);
 const post = require('../controllers/post.js');
 // 创建帖子
 router.post('/post',post.create);
+
+const reply = require('../controllers/reply.js');
 // 创建回复
-router.post('/reply', post.createReply);
+router.post('/reply', reply.create);
 
 
 module.exports = router;

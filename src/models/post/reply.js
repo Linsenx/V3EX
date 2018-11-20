@@ -10,13 +10,15 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
  * -- likeCount: 顶
  * -- dislikeCount: 踩
  * -- reviewCount: 点击量
+ * -- deleted: 是否被删除
  */
 const ReplySchema = new mongoose.Schema({
   content: { type: String, required: true },
   authorId: { type: ObjectId, required: true},
   postId: { type: ObjectId, required: true },
   createAt: { type: Date, required: true },
-  updateAt: { type: Date, required: true }
+  updateAt: { type: Date, required: true },
+  deleted: { type: Boolean, default: false }
 });
 
 ReplySchema.index({ postId: 1 });
