@@ -57,9 +57,6 @@ class ReplyController {
 
     return ctx.success({ msg: '删除回复成功！' });
   }
-  async update(ctx){
-    const
-  }
 }
 
 module.exports = new ReplyController();
