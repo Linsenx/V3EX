@@ -59,21 +59,6 @@ class UserController {
   }
 
 
-
-
-  async user(ctx){
-    let Index = 1;
-    const { type,item } = ctx.query;
-    if(item) Index =item;
-    const user = ctx.session.user;
-    return ctx.render('user', { 
-      title: '',
-      message:'',
-      user,
-      index: Index,
-      menu:menu[type]
-    });
-  }
 }
 
 module.exports = new UserController();
