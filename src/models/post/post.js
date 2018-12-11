@@ -24,7 +24,9 @@ const PostSchema = new mongoose.Schema({
   createAt: { type: Date, required: true },
   updateAt: { type: Date, required: true },
   likeCount: { type: Number, default: 0 },
+  likeUsers: { type: Array, default:[] },
   dislikeCount: { type: Number, default: 0 },
+  dislikeUsers: { type: Array, default:[] },
   reviewCount: { type: Number, default: 0 },
   deleted: { type: Boolean, default: false }
 });

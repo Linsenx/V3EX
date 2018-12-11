@@ -57,6 +57,8 @@ class UserController {
     ctx.logout();
     ctx.success({ msg: '登出成功' });
   }
+
+
 }
 
 module.exports = new UserController();
