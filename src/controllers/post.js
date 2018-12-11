@@ -66,15 +66,22 @@ class PostController {
     if (!post) {
       return ctx.error({ msg: '参数错误，未找到该帖子' });
     }
-    const haveliked =  post.likeUsers.includes(user.id);
-    if (haveliked){
-      return ctx.error({ msg: '您已点赞过该贴' });
+    const haveLiked =  post.likeUsers.includes(user.id);
+    const havedisLiked = post.dislikeUsers.includes(user.id);
+    if (haveLiked){
+      post.likeUsers.splice(post.likeUsers.findIndex(item => item ==user.id ), 1)
+      post.likeCount -- ;
+      post.save();
+      return ctx.error({ msg: '取消点赞成功' });
+    }
+    if(havedisLiked){
+      post.dislikeUsers.splice(post.dislikeUsers.findIndex(item => item ==user.id ), 1)
+      post.dislikeCount -- ;
     }
     post.likeUsers.push(user.id);
     post.likeCount++;
     post.save();
-    
-    return ctx.success({ msg: '点赞成功,此时点赞数为' + post.likeCount })
+    return ctx.success({ msg: '点赞成功,此时点赞数为' + post.likeCount });
   }
 
   //踩帖子
@@ -90,9 +97,17 @@ class PostController {
     if (!post) {
       return ctx.error({ msg: '参数错误，未找到该帖子' });
     }
+    const haveLiked =  post.likeUsers.includes(user.id);
     const havedisLiked =  post.dislikeUsers.includes(user.id);
     if (havedisLiked){
-      return ctx.error({ msg: '您已踩过该贴' });
+      post.dislikeUsers.splice(post.dislikeUsers.findIndex(item => item ==user.id ), 1);
+      post.dislikeCount -- ;
+      post.save();
+      return ctx.error({ msg: '取消踩成功' });
+    }
+    if(haveLiked){
+      post.likeUsers.splice(post.likeUsers.findIndex(item => item ==user.id ), 1);
+      post.likeCount -- ;
     }
     post.dislikeUsers.push(user.id);
     post.dislikeCount++;
@@ -121,7 +136,6 @@ class PostController {
 
     post.content = content;
     post.updateAt = new Date();
-    console.log(post.content, post.updateAt);
     post.save();
 
     ctx.success({ msg: '帖子更新成功' });
