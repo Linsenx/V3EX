@@ -3,6 +3,20 @@ const PostModel = require('../models/post/post.js');
 const UserModel = require('../models/user/user.js');
 
 class PostController {
+
+  // 获取板块主页帖子
+  async index(ctx) {
+    const { node, index = 0, limit = 15 } = ctx.request.query;
+    if (validator.isEmpty(node)) {
+      return ctx.error({ msg: '板块不能为空' });
+    }
+    const posts = await PostModel
+      .find({ node, deleted: false }, { delete: 0, node: 0 })
+      .sort({ 'updateAt': -1 })
+      .skip(+index).limit(+limit);
+    return ctx.success({ data: posts });
+  }
+
   // 创建帖子
   async create(ctx) {
     const { node, title, content } = ctx.request.body;
@@ -32,19 +46,20 @@ class PostController {
     if (ctx.isUnauthenticated()) {
       return ctx.error({ msg: '您尚未登录，无法进行删帖操作' });
     }
-    const user = ctx.state.user;
+
     const post = await PostModel.findById(postId);
-    
     if (!post) {
       return ctx.error({ msg: '参数错误，未找到该帖子' });
     }
+
+    const user = ctx.state.user;
     if (!validator.equals(post.authorId.toString(), user.id)) {
       return ctx.error({ msg: '您没有权限删帖' });
     }
     post.deleted = true;
-    post.save();
+    await post.save();
 
-    return ctx.success({ msg: '删帖成功！' });
+    return ctx.success({ msg: '帖子删除成功' });
   }
 }
 

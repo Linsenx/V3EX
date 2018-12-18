@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/NightCats/V3EX#readme",
   "dependencies": {
+    "@koa/cors": "^2.2.2",
     "blueimp-md5": "^2.10.0",
     "koa": "^2.6.1",
     "koa-bodyparser": "^4.2.1",

@@ -1,6 +1,12 @@
 const Koa = require('koa');
 const app = new Koa();
 
+// cors
+const cors = require('@koa/cors');
+app.use(cors({
+  credentials: true
+}));
+
 // middlewares
 app.use(require('./middlewares/filter.js'));
 app.use(require('./middlewares/response.js'));

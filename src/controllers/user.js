@@ -6,12 +6,13 @@ const passport = require('koa-passport');
 class UserController {
   // 用户注册
   async register(ctx) {
+    console.log(ctx.request.body);
     const { username, password, email } = ctx.request.body;
     if (validator.isEmpty(username) || validator.isEmpty(password)) {
       return ctx.error({ msg: '用户名密码不得为空' });
     }
 
-    if (email && validator.isEmail(email)) {
+    if (email && !validator.isEmail(email)) {
       return ctx.error({ msg: '电子邮箱格式错误' });
     }
 
@@ -48,7 +49,7 @@ class UserController {
     ctx.login(user);
     ctx.success({ msg: '登录成功' });
   }
-
+  
   // 用户登出
   logout(ctx) {
     if (ctx.isUnauthenticated()) {

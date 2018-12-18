@@ -1,7 +1,22 @@
 const validator = require('validator');
+const PostModel = require('../models/post/post.js');
 const ReplyModel = require('../models/post/reply.js');
 
 class ReplyController {
+
+  // 获取回复
+  async get(ctx) {
+    const { postId, index = 0, limit = 15 } = ctx.request.query;
+    if (validator.isEmpty(postId)) {
+      return ctx.error({ msg: '帖子ID不能为空' });
+    }
+    const replys = await ReplyModel
+      .find({ postId, deleted: false }, { deleted: 0, postId: 0 })
+      .sort({ 'updateAt': -1 })
+      .skip(+index).limit(+limit);
+    return ctx.success({ data: replys });
+  }
+
   // 发表回复
   async create(ctx) {
     const { postId, content } = ctx.request.body;
