@@ -12,7 +12,7 @@ class ReplyController {
     }
     const replys = await ReplyModel
       .find({ postId, deleted: false }, { deleted: 0, postId: 0 })
-      .sort({ 'updateAt': -1 })
+      .sort({ 'updateAt': 1 })
       .skip(+index).limit(+limit);
     return ctx.success({ data: replys });
   }

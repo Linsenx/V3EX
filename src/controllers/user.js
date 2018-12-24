@@ -6,7 +6,6 @@ const passport = require('koa-passport');
 class UserController {
   // 用户注册
   async register(ctx) {
-    console.log(ctx.request.body);
     const { username, password, email } = ctx.request.body;
     if (validator.isEmpty(username) || validator.isEmpty(password)) {
       return ctx.error({ msg: '用户名密码不得为空' });
@@ -47,7 +46,10 @@ class UserController {
     }
     
     ctx.login(user);
-    ctx.success({ msg: '登录成功' });
+    ctx.success({ msg: '登录成功', data: {
+      id: user.id,
+      username: user.username
+    }});
   }
   
   // 用户登出
@@ -57,6 +59,19 @@ class UserController {
     }
     ctx.logout();
     ctx.success({ msg: '登出成功' });
+  }
+
+  // 获取用户信息
+  async getUserInfo(ctx) {
+    const { userId } = ctx.request.query;
+    if (validator.isEmpty(userId)) {
+      return ctx.error({ msg: '用户id不能为空' });
+    }
+    const user = await UserModel.findOne({ _id: userId }, { password: 0 });
+    if (!user) {
+      return ctx.error({ msg: '未找到该用户' });
+    }
+    return ctx.success({ data: user });
   }
 }
 

@@ -11,10 +11,25 @@ class PostController {
       return ctx.error({ msg: '板块不能为空' });
     }
     const posts = await PostModel
-      .find({ node, deleted: false }, { delete: 0, node: 0 })
+      .find({ node, deleted: false }, { title: 1, id: 1, authorId: 1, updateAt: 1 })
       .sort({ 'updateAt': -1 })
       .skip(+index).limit(+limit);
     return ctx.success({ data: posts });
+  }
+
+  // 获取帖子信息
+  async getPostInfo(ctx) {
+    const { postId } = ctx.request.query;
+    if (validator.isEmpty(postId)) {
+      return ctx.error({ msg: '帖子id不能为空' });
+    }
+    const post = await PostModel.findOne({ _id: postId, deleted: false });
+    if (!post) {
+      return ctx.error({ msg: '未找到该帖子' });
+    }
+    post.reviewCount ++;
+    post.save();
+    return ctx.success({ data: post });
   }
 
   // 创建帖子
@@ -43,6 +58,7 @@ class PostController {
   // 删除帖子
   async delete(ctx) {
     const { postId } = ctx.request.body;
+
     if (ctx.isUnauthenticated()) {
       return ctx.error({ msg: '您尚未登录，无法进行删帖操作' });
     }

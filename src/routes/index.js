@@ -7,14 +7,18 @@ router.post('/user', user.register);
 router.post('/session', user.login);
 // 用户登出
 router.delete('/session', user.logout);
+// 获取用户信息
+router.get('/user', user.getUserInfo);
 
 const post = require('../controllers/post.js');
 // 创建帖子
 router.post('/post', post.create);
 // 删除帖子
 router.delete('/post', post.delete);
-// 获取帖子
-router.get('/post', post.index);
+// 获取帖子列表
+router.get('/posts', post.index);
+// 获取帖子信息
+router.get('/post', post.getPostInfo);
 
 const reply = require('../controllers/reply.js');
 // 获取回复
